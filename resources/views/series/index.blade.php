@@ -10,16 +10,16 @@
             {{ $message }}
         </div>
     @endif
-    <a href="/series/create" class="btn btn-dark mb-2">Adicionar</a>
+    <a href="{{ route('series.create') }}" class="btn btn-dark mb-2">Adicionar</a>
     <ul class="list-group">
         @foreach ($series as $serie)
-            <li class="list-group-item">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
                 {{ $serie['name'] }}
                 <form action="/series/destroy/{{ $serie['id'] }}" method="post" onsubmit="return confirm('Tem ctz, parça?')">
                     @csrf
                     @method('DELETE')
-                    <button class="btn btn-danger">
-                        Excluir
+                    <button class="btn btn-danger btn-sm">
+                        <i class="far fa-trash-alt"></i>
                     </button>
                 </form>
             </li>

@@ -28,7 +28,7 @@ class SeriesController extends Controller
         if ($serie->save()) {
             $request->session()->flash('message', 'Série cadastrada com sucesso.');
 
-            return redirect('/series');
+            return redirect()->route('series.index');
         }
 
         $request->session()->flash('message', 'Erro ao cadastrar série.');
@@ -41,6 +41,6 @@ class SeriesController extends Controller
 
         $request->session()->flash('message', 'Série removida com sucesso.');
 
-        return redirect('/series');
+        return redirect()->route('series.index');
     }
 }
