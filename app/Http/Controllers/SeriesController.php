@@ -39,12 +39,22 @@ class SeriesController extends Controller
         return redirect()->route('series.index');
     }
 
-    public function destroy(Request $request, SerieDestroyService $service)
+    public function destroy($id, Request $request, SerieDestroyService $service)
     {
-        $serieName = $service->destroy($request->id);
+        $serieName = $service->destroy($id);
 
         $request->session()->flash('message', "Série {$serieName} removida com sucesso.");
 
         return redirect()->route('series.index');
+    }
+
+    public function update(int $id, Request $request)
+    {
+        $newName = $request->post('name');
+        /** @var Serie */
+        $serie = Serie::find($id);
+
+        $serie->name = $newName;
+        $serie->save();
     }
 }
