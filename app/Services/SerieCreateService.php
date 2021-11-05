@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Serie;
 
-class SerieCreatorService
+class SerieCreateService
 {
     public function create(string $serieName, $numberOfEpisodes, $numberOfSeasons)
     {

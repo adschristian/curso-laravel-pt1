@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SerieFormRequest;
+use App\Models\Episode;
 use App\Models\Season;
 use App\Models\Serie;
-use App\Services\SerieCreatorService;
+use App\Services\SerieCreateService;
 use Illuminate\Http\Request;
 
 class SeriesController extends Controller
@@ -24,7 +25,7 @@ class SeriesController extends Controller
         return view('series.create');
     }
 
-    public function store(SerieFormRequest $request, SerieCreatorService $service)
+    public function store(SerieFormRequest $request, SerieCreateService $service)
     {
         $serie = $service->create(
             $request->post('name'),
@@ -32,17 +33,26 @@ class SeriesController extends Controller
             $request->post('number_of_episodes')
         );
 
-        $request->session()->flash('message', "Série {$serie->id} cadastrada com sucesso.");
+        $request->session()->flash('message', "Série {$serie->name} cadastrada com sucesso.");
 
         return redirect()->route('series.index');
     }
 
     public function destroy(Request $request)
     {
-        $id = $request->id;
-        Serie::destroy($id);
+        /** @var Serie */
+        $serie = Serie::find($request->id);
 
-        $request->session()->flash('message', 'Série removida com sucesso.');
+        $serieName = $serie->name;
+        $serie->seasons->each(function (Season $season) {
+            $season->episodes->each(function (Episode $episode) {
+                $episode->delete();
+            });
+            $season->delete();
+        });
+        $serie->delete();
+
+        $request->session()->flash('message', "Série {$serieName} removida com sucesso.");
 
         return redirect()->route('series.index');
     }
