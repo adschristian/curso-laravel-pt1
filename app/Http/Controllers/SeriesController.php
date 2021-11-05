@@ -7,6 +7,7 @@ use App\Models\Episode;
 use App\Models\Season;
 use App\Models\Serie;
 use App\Services\SerieCreateService;
+use App\Services\SerieDestroyService;
 use Illuminate\Http\Request;
 
 class SeriesController extends Controller
@@ -38,19 +39,9 @@ class SeriesController extends Controller
         return redirect()->route('series.index');
     }
 
-    public function destroy(Request $request)
+    public function destroy(Request $request, SerieDestroyService $service)
     {
-        /** @var Serie */
-        $serie = Serie::find($request->id);
-
-        $serieName = $serie->name;
-        $serie->seasons->each(function (Season $season) {
-            $season->episodes->each(function (Episode $episode) {
-                $episode->delete();
-            });
-            $season->delete();
-        });
-        $serie->delete();
+        $serieName = $service->destroy($request->id);
 
         $request->session()->flash('message', "Série {$serieName} removida com sucesso.");
 
