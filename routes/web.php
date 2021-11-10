@@ -1,7 +1,6 @@
 <?php
 
-use App\Http\Controllers\SeasonsController;
-use App\Http\Controllers\SeriesController;
+use App\Http\Controllers\{SeasonsController, SeriesController, EpisodesController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,3 +24,6 @@ Route::post('/series/store', [SeriesController::class, 'store']);
 Route::delete('/series/destroy/{id}', [SeriesController::class, 'destroy']);
 Route::get('/series/{serieId}/seasons', [SeasonsController::class, 'index']);
 Route::post('/series/{id}/edit', [SeriesController::class, 'update']);
+
+Route::get('/seasons/{season}/episodes', [EpisodesController::class, 'index']);
+Route::post('/seasons/{season}/episodes/watch', [EpisodesController::class, 'watch']);

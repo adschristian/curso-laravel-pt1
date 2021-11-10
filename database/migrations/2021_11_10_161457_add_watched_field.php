@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSeasonsTable extends Migration
+class AddWatchedField extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateSeasonsTable extends Migration
      */
     public function up()
     {
-        Schema::create('seasons', function (Blueprint $table) {
-            $table->id();
-            $table->integer('number');
-            $table->integer('serie_id');
-
-            $table->foreign('serie_id')->references('id')->on('series');
+        Schema::table('episodes', function (Blueprint $table) {
+            $table->boolean('watched')->default(false);
         });
     }
 
@@ -29,6 +25,8 @@ class CreateSeasonsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('seasons');
+        Schema::table('episodes', function (Blueprint $table) {
+            $table->dropColumn('watched');
+        });
     }
 }
